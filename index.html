@@ -784,7 +784,7 @@
     <div class="bcard b-write bounce">
       <span class="w-kicker" data-i18n="writeKicker">My writing</span>
       <h3 data-i18n="writeTitle">I write articles. Read them on Ahsan Knows</h3>
-      <p data-i18n="writeText">History, historical figures, politics, sports and society. Long, thoughtful stories in English and Bengali, written and published by me.</p>
+      <p data-i18n="writeText">History, historical figures, politics, sports and society. Long, thoughtful stories, written and published by me.</p>
       <div class="w-row">
         <a class="w-btn bounce" href="https://ahsan-knows.vercel.app" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V4H6.5A2.5 2.5 0 004 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 006.5 22H20v-5"/></svg>
@@ -1267,7 +1267,7 @@
       statStories: "Stories published", statLang: "Languages I know",
       writeKicker: "My writing",
       writeTitle: "I write articles. Read them on Ahsan Knows",
-      writeText: "History, historical figures, politics, sports and society. Long, thoughtful stories in English and Bengali, written and published by me.",
+      writeText: "History, historical figures, politics, sports and society. Long, thoughtful stories, written and published by me.",
       writeBtn: "Read my articles", writeTopics: "Napoleon · History · Society · Sports",
       intLabel: "Interests", intFoot: "Football", intPoets: "Rumi & Mirza Ghalib",
       intPoetry: "Poetry & reading", intMusic: "Music · John Denver",
@@ -1377,7 +1377,7 @@
       statStories: "প্রকাশিত লেখা", statLang: "ভাষা জানি",
       writeKicker: "আমার লেখা",
       writeTitle: "আমি আর্টিকেল লিখি। পড়ুন Ahsan Knows-এ",
-      writeText: "ইতিহাস, ঐতিহাসিক ব্যক্তিত্ব, রাজনীতি, খেলা আর সমাজ নিয়ে ইংরেজি ও বাংলায় বড় বড় গল্প, সবই আমার নিজের লেখা।",
+      writeText: "ইতিহাস, ঐতিহাসিক ব্যক্তিত্ব, রাজনীতি, খেলা আর সমাজ নিয়ে বড় বড় গল্প, সবই আমার নিজের লেখা।",
       writeBtn: "আমার লেখা পড়ুন", writeTopics: "নেপোলিয়ন · ইতিহাস · সমাজ · খেলা",
       intLabel: "পছন্দ", intFoot: "ফুটবল", intPoets: "রুমি ও মির্জা গালিব",
       intPoetry: "কবিতা ও পড়া", intMusic: "গান · জন ডেনভার",
@@ -1663,27 +1663,98 @@
 
   function fetchJSON(url, ms) {
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, ms) : null;
+    var timer = ctrl ? setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, ms) : null;
+    function clearTimer() { if (timer) { clearTimeout(timer); timer = null; } }
     return fetch(url, ctrl ? { signal: ctrl.signal } : {}).then(function (r) {
-      if (timer) clearTimeout(timer);
+      clearTimer();
       if (!r.ok) throw new Error('request failed');
       return r.json();
+    }).catch(function (err) {
+      clearTimer();
+      throw err;
     });
   }
 
-  fetchJSON('https://ipapi.co/json/', 6000).then(function (loc) {
-    if (!loc || loc.latitude === undefined || loc.longitude === undefined) return null;
-    liveData.city = loc.city || null;
-    liveData.country = loc.country_name || null;
+  function isNum(v) { return typeof v === 'number' && isFinite(v); }
+  function toNum(v) { var n = (typeof v === 'string') ? parseFloat(v) : v; return isNum(n) ? n : null; }
+
+  function normalizeLoc(city, country, latRaw, lonRaw) {
+    var lat = toNum(latRaw);
+    var lon = toNum(lonRaw);
+    if (lat === null || lon === null) return null;
+    return { city: city || null, country: country || null, lat: lat, lon: lon };
+  }
+
+  function fetchLocation() {
+    /* 1) ipapi.co — often blocked by Brave Shields as a tracker */
+    return fetchJSON('https://ipapi.co/json/', 4000).then(function (loc) {
+      if (!loc) throw new Error('no location');
+      var n = normalizeLoc(loc.city, loc.country_name, loc.latitude, loc.longitude);
+      if (!n) throw new Error('no coords');
+      return n;
+    }).catch(function () {
+      /* 2) ipwho.is — free, HTTPS, CORS-enabled fallback */
+      return fetchJSON('https://ipwho.is/', 4000).then(function (loc) {
+        if (!loc || loc.success === false) throw new Error('ipwho failed');
+        var n = normalizeLoc(loc.city, loc.country, loc.latitude, loc.longitude);
+        if (!n) throw new Error('no coords');
+        return n;
+      });
+    }).catch(function () {
+      /* 3) freeipapi.com — last resort */
+      return fetchJSON('https://freeipapi.com/api/json', 4000).then(function (loc) {
+        if (!loc) throw new Error('freeipapi failed');
+        var n = normalizeLoc(loc.cityName, loc.countryName, loc.latitude, loc.longitude);
+        if (!n) throw new Error('no coords');
+        return n;
+      });
+    });
+  }
+
+  var llFirstWeatherFlipDone = false;
+  function scheduleFirstWeatherFlip() {
+    if (llFirstWeatherFlipDone) return;
+    llFirstWeatherFlipDone = true;
+    /* Show the weather view soon after it first loads, so a visitor
+       actually sees it within the first ~6-8s even if it arrived late
+       via a fallback / retry. The regular 4.5s interval takes over after. */
+    setTimeout(function () {
+      if (hasWeather() && !llShowingB) showLiveView(true);
+    }, 1400);
+  }
+
+  function fetchWeather(lat, lon, isRetry) {
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + encodeURIComponent(lat) +
+      '&longitude=' + encodeURIComponent(lon) + '&current=temperature_2m,weather_code';
+    return fetchJSON(url, 6000).then(function (wx) {
+      if (!wx || !wx.current || typeof wx.current.temperature_2m !== 'number') {
+        throw new Error('no weather');
+      }
+      return wx;
+    }).catch(function (err) {
+      if (!isRetry) {
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            fetchWeather(lat, lon, true).then(resolve, reject);
+          }, 5000);
+        });
+      }
+      throw err;
+    });
+  }
+
+  fetchLocation().then(function (loc) {
+    if (!loc) return null;
+    liveData.city = loc.city;
+    liveData.country = loc.country;
     renderLiveLine();
-    return fetchJSON(
-      'https://api.open-meteo.com/v1/forecast?latitude=' + loc.latitude +
-      '&longitude=' + loc.longitude + '&current=temperature_2m,weather_code', 6000);
+    return fetchWeather(loc.lat, loc.lon, false);
   }).then(function (wx) {
     if (wx && wx.current) {
       liveData.temp = wx.current.temperature_2m;
       liveData.code = wx.current.weather_code;
       renderLiveLine();
+      scheduleFirstWeatherFlip();
     }
   }).catch(function () { /* location/weather unavailable — date & time still show, no rotation */ });
 
