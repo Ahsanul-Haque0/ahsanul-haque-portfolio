@@ -58,23 +58,21 @@
 
   .page{max-width:1180px;margin:0 auto;padding:22px 22px 48px}
 
-  /* ---------- LIVE INFO STRIP ---------- */
-  .live-strip{display:flex;justify-content:center;margin:0 0 4px}
-  .live-pill{
-    display:inline-flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
-    background:#fff;border:1px solid var(--line);border-radius:999px;max-width:100%;
-    padding:7px 16px;box-shadow:0 8px 16px -12px rgba(35,33,29,.35);
-    font-size:12.5px;font-weight:500;color:var(--ink-soft);line-height:1.4;
+  /* ---------- LIVE INFO LINE (plain text under the header) ---------- */
+  .live-line{
+    display:flex;align-items:center;flex-wrap:wrap;
+    margin:12px 4px 0;min-height:1.6em;
+    font-size:12.5px;font-weight:500;color:var(--muted);line-height:1.6;
   }
-  .live-pill .lp-loc{display:inline-flex;align-items:center;gap:5px;font-weight:600;color:var(--ink);white-space:nowrap}
-  .live-pill .lp-loc svg{width:13px;height:13px;color:var(--accent-deep);flex:0 0 auto}
-  .live-pill .lp-sep{color:var(--muted);opacity:.75}
-  .live-pill .lp-temp{font-weight:700;color:var(--ink);white-space:nowrap}
-  .live-pill [hidden]{display:none !important}
-  @media (max-width:560px){
-    .live-pill{font-size:12px;padding:6px 13px;gap:7px}
-    .live-pill .lp-cond{display:none}
-  }
+  .live-line .ll-view{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;transition:opacity .35s ease}
+  .live-line .ll-view.ll-out{opacity:0}
+  .live-line .ll-view[hidden]{display:none !important}
+  .live-line .ll-sep{opacity:.65}
+  .live-line .ll-loc{font-weight:600;color:var(--ink-soft)}
+  .live-line .ll-temp{font-weight:700;color:var(--ink-soft)}
+  .live-line .ll-wx-ic{display:inline-flex;line-height:0;color:var(--muted);flex:0 0 auto}
+  .live-line .ll-wx-ic svg{width:16px;height:16px;display:block}
+  .live-line .ll-wx-ic.sun{color:#E8890C}
 
   /* ---------- bounce / motion ---------- */
   .bounce{transition:transform .5s var(--spring),box-shadow .3s ease,border-color .25s ease,background .25s ease}
@@ -120,6 +118,10 @@
   .btn-dark:hover{background:#141210}
   .btn-white{background:#fff;color:var(--ink);box-shadow:0 14px 26px -14px rgba(35,33,29,.4)}
   .btn-white:hover{box-shadow:0 20px 32px -14px rgba(35,33,29,.45)}
+  /* Header Instagram pill: box height matched exactly to the EN/বাংলা toggle
+     (toggle = 2.25rem button + 3px padding + 1px border, top and bottom = 2.75rem).
+     Its old taller look came from the .btn padding (13px top/bottom), not the shadow. */
+  .top-actions .btn-top{height:2.75rem;padding:0 20px;font-size:13.5px}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -640,10 +642,12 @@
     .hero-photo{width:100%;max-width:420px}
     .fc-ak{left:0}
     .fc-chart{right:0}
-    .hero-cta{justify-content:center;gap:8px}
+    .hero-cta{justify-content:center;align-items:center;gap:8px}
     .hero-cta .btn{
-      padding:11px 5px;font-size:11.5px;line-height:1.3;
-      white-space:nowrap;gap:5px;
+      /* identical fixed height + centred content on both buttons,
+         so their top edges sit perfectly level in EN and BN */
+      height:2.75rem;padding:0 5px;font-size:11.5px;line-height:1.25;
+      white-space:nowrap;gap:5px;align-items:center;justify-content:center;
     }
     .hero-cta .btn svg{width:12px;height:12px}
     .hero-cta .btn svg.ig-ic{width:14px;height:14px}
@@ -661,22 +665,6 @@
 <body>
 
 <div class="page" id="top">
-
-  <!-- ================= LIVE INFO STRIP ================= -->
-  <div class="live-strip" aria-label="Your local date, time and weather">
-    <div class="live-pill">
-      <span class="lp-loc" id="lpLoc" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10.2c0 5.2-8 11.3-8 11.3S4 15.4 4 10.2a8 8 0 1116 0z"/><circle cx="12" cy="10.2" r="3"/></svg>
-        <span id="lpCity"></span>
-      </span>
-      <span class="lp-sep" id="lpSep1" hidden aria-hidden="true">·</span>
-      <span id="lpDate"></span>
-      <span class="lp-sep" aria-hidden="true">·</span>
-      <span id="lpTime"></span>
-      <span class="lp-sep" id="lpSep2" hidden aria-hidden="true">·</span>
-      <span class="lp-temp" id="lpTemp" hidden></span>
-    </div>
-  </div>
 
   <!-- ================= TOP BAR ================= -->
   <header class="topbar">
@@ -696,11 +684,29 @@
         <button type="button" id="btnEn" class="on" aria-pressed="true">EN</button>
         <button type="button" id="btnBn" aria-pressed="false">বাংলা</button>
       </div>
-      <a class="btn btn-dark bounce" href="https://instagram.com/ahsanul_haque11" target="_blank" rel="noopener">Instagram
+      <a class="btn btn-dark btn-top bounce" href="https://instagram.com/ahsanul_haque11" target="_blank" rel="noopener">Instagram
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </a>
     </div>
   </header>
+
+  <!-- ================= LIVE INFO LINE (rotates: date & time <-> weather) ================= -->
+  <div class="live-line" aria-label="Your local date, time and weather">
+    <span class="ll-view" id="llViewA">
+      <span id="llDate"></span>
+      <span class="ll-sep" aria-hidden="true">·</span>
+      <span id="llTime"></span>
+      <span class="ll-sep" id="llSepLoc" hidden aria-hidden="true">·</span>
+      <span class="ll-loc" id="llLoc" hidden></span>
+    </span>
+    <span class="ll-view" id="llViewB" hidden>
+      <span class="ll-wx-ic" id="llWxIcon" aria-hidden="true"></span>
+      <span class="ll-temp" id="llTemp"></span>
+      <span id="llCond"></span>
+      <span class="ll-sep" aria-hidden="true">·</span>
+      <span class="ll-loc" id="llWxCity"></span>
+    </span>
+  </div>
 
   <!-- ================= HERO ================= -->
   <div class="hero">
@@ -1475,7 +1481,7 @@
     bEn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
     bBn.setAttribute('aria-pressed', lang === 'bn' ? 'true' : 'false');
     if (typeof refreshGalleryUI === 'function') refreshGalleryUI();
-    if (typeof renderLiveStrip === 'function') renderLiveStrip();
+    if (typeof renderLiveLine === 'function') renderLiveLine();
   }
 
   document.getElementById('btnEn').addEventListener('click', function () { setLang('en'); });
@@ -1548,7 +1554,9 @@
     });
   }
 
-  /* ---------- Live info strip: the visitor's own date, time, city & weather ---------- */
+  /* ---------- Live info line: the visitor's own date, time, city & weather.
+     One plain line under the header; it fades between date & time (view A)
+     and weather with a condition icon (view B) every few seconds. ---------- */
   var liveData = { city: null, country: null, temp: null, code: null };
 
   function wxKey(code) {
@@ -1563,11 +1571,27 @@
     return 'wxCloudy';
   }
 
-  function renderLiveStrip() {
+  /* Small drawn SVG icons per condition (stroke style, currentColor) */
+  var WX_ICONS = {
+    wxClear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"/></svg>',
+    wxPartly: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.2" cy="6.2" r="2.9"/><path d="M6.2 1.2v1.3M1.2 6.2h1.3M2.7 2.7l.9.9"/><g transform="translate(5.5,6.5) scale(0.74)"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></g></svg>',
+    wxCloudy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+    wxFog: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8.5h16M6.5 13h11M4 17.5h16"/></svg>',
+    wxDrizzle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.6A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.6 9"/><path d="M8 17.5h.01M12 19.5h.01M16 17.5h.01M8 21h.01M12 23h.01M16 21h.01" stroke-width="2.6"/></svg>',
+    wxRain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.6A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.6 9"/><path d="M8 18l-1 3M12.5 18l-1 3M17 18l-1 3"/></svg>',
+    wxSnow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.6A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.6 9"/><path d="M8 17.5h.01M12 19.8h.01M16 17.5h.01M8 21.5h.01M12 23.3h.01M16 21.5h.01" stroke-width="2.6"/></svg>',
+    wxThunder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.6A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.6 9"/><path d="M13 15l-3.2 4.5h3L10.6 23" fill="currentColor" stroke="none"/></svg>'
+  };
+
+  function hasWeather() {
+    return liveData.temp !== null && liveData.temp !== undefined;
+  }
+
+  function renderLiveLine() {
     var locale = (currentLang === 'bn') ? 'bn-BD' : 'en-GB';
     var now = new Date();
-    var dateEl = document.getElementById('lpDate');
-    var timeEl = document.getElementById('lpTime');
+    var dateEl = document.getElementById('llDate');
+    var timeEl = document.getElementById('llTime');
     if (dateEl) {
       dateEl.textContent = new Intl.DateTimeFormat(locale, {
         weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
@@ -1579,35 +1603,63 @@
       }).format(now);
     }
     if (liveData.city) {
-      var cityEl = document.getElementById('lpCity');
-      var locEl = document.getElementById('lpLoc');
-      var sep1 = document.getElementById('lpSep1');
-      if (cityEl && locEl) {
-        cityEl.textContent = liveData.country ? (liveData.city + ', ' + liveData.country) : liveData.city;
+      var locEl = document.getElementById('llLoc');
+      var sepLoc = document.getElementById('llSepLoc');
+      if (locEl) {
+        locEl.textContent = liveData.country ? (liveData.city + ', ' + liveData.country) : liveData.city;
         locEl.hidden = false;
-        if (sep1) sep1.hidden = false;
+        if (sepLoc) sepLoc.hidden = false;
       }
+      var wxCity = document.getElementById('llWxCity');
+      if (wxCity) wxCity.textContent = liveData.city;
     }
-    if (liveData.temp !== null && liveData.temp !== undefined) {
-      var tempEl = document.getElementById('lpTemp');
-      var sep2 = document.getElementById('lpSep2');
-      if (tempEl) {
-        var dict = I18N[currentLang];
-        tempEl.textContent = Math.round(liveData.temp).toLocaleString(locale) + '°C';
-        var cond = dict[wxKey(liveData.code)];
-        if (cond) {
-          var cs = document.createElement('span');
-          cs.className = 'lp-cond';
-          cs.textContent = ' · ' + cond;
-          tempEl.appendChild(cs);
-        }
-        tempEl.hidden = false;
-        if (sep2) sep2.hidden = false;
+    if (hasWeather()) {
+      var key = wxKey(liveData.code);
+      var dict = I18N[currentLang];
+      var tempEl = document.getElementById('llTemp');
+      var condEl = document.getElementById('llCond');
+      var icEl = document.getElementById('llWxIcon');
+      if (tempEl) tempEl.textContent = Math.round(liveData.temp).toLocaleString(locale) + '°C';
+      if (condEl) condEl.textContent = dict[key] || '';
+      if (icEl) {
+        icEl.innerHTML = WX_ICONS[key] || WX_ICONS.wxCloudy;
+        icEl.className = 'll-wx-ic' + ((key === 'wxClear' || key === 'wxPartly') ? ' sun' : '');
       }
     }
   }
-  renderLiveStrip();
-  setInterval(renderLiveStrip, 30000);
+
+  /* Rotation between the two views, with a gentle fade */
+  var llViewA = document.getElementById('llViewA');
+  var llViewB = document.getElementById('llViewB');
+  var llShowingB = false;
+  var llSwapping = false;
+
+  function showLiveView(showB) {
+    if (!llViewA || !llViewB || llSwapping) return;
+    if (showB && !hasWeather()) showB = false;
+    if (showB === llShowingB) return;
+    llShowingB = showB;
+    llSwapping = true;
+    var hideEl = showB ? llViewA : llViewB;
+    var showEl = showB ? llViewB : llViewA;
+    hideEl.classList.add('ll-out');
+    setTimeout(function () {
+      hideEl.hidden = true;
+      hideEl.classList.remove('ll-out');
+      showEl.hidden = false;
+      showEl.classList.add('ll-out');
+      void showEl.offsetWidth; /* reflow so the fade-in transition runs */
+      showEl.classList.remove('ll-out');
+      llSwapping = false;
+    }, 340);
+  }
+
+  renderLiveLine();
+  setInterval(renderLiveLine, 30000);
+  setInterval(function () {
+    if (!hasWeather()) { showLiveView(false); return; }
+    showLiveView(!llShowingB);
+  }, 4500);
 
   function fetchJSON(url, ms) {
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
@@ -1623,7 +1675,7 @@
     if (!loc || loc.latitude === undefined || loc.longitude === undefined) return null;
     liveData.city = loc.city || null;
     liveData.country = loc.country_name || null;
-    renderLiveStrip();
+    renderLiveLine();
     return fetchJSON(
       'https://api.open-meteo.com/v1/forecast?latitude=' + loc.latitude +
       '&longitude=' + loc.longitude + '&current=temperature_2m,weather_code', 6000);
@@ -1631,9 +1683,9 @@
     if (wx && wx.current) {
       liveData.temp = wx.current.temperature_2m;
       liveData.code = wx.current.weather_code;
-      renderLiveStrip();
+      renderLiveLine();
     }
-  }).catch(function () { /* location/weather unavailable — date & time still show */ });
+  }).catch(function () { /* location/weather unavailable — date & time still show, no rotation */ });
 
   var photoModal = document.getElementById('photoModal');
   var photoModalImg = document.getElementById('photoModalImg');
