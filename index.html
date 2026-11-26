@@ -58,6 +58,24 @@
 
   .page{max-width:1180px;margin:0 auto;padding:22px 22px 48px}
 
+  /* ---------- LIVE INFO STRIP ---------- */
+  .live-strip{display:flex;justify-content:center;margin:0 0 4px}
+  .live-pill{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
+    background:#fff;border:1px solid var(--line);border-radius:999px;max-width:100%;
+    padding:7px 16px;box-shadow:0 8px 16px -12px rgba(35,33,29,.35);
+    font-size:12.5px;font-weight:500;color:var(--ink-soft);line-height:1.4;
+  }
+  .live-pill .lp-loc{display:inline-flex;align-items:center;gap:5px;font-weight:600;color:var(--ink);white-space:nowrap}
+  .live-pill .lp-loc svg{width:13px;height:13px;color:var(--accent-deep);flex:0 0 auto}
+  .live-pill .lp-sep{color:var(--muted);opacity:.75}
+  .live-pill .lp-temp{font-weight:700;color:var(--ink);white-space:nowrap}
+  .live-pill [hidden]{display:none !important}
+  @media (max-width:560px){
+    .live-pill{font-size:12px;padding:6px 13px;gap:7px}
+    .live-pill .lp-cond{display:none}
+  }
+
   /* ---------- bounce / motion ---------- */
   .bounce{transition:transform .5s var(--spring),box-shadow .3s ease,border-color .25s ease,background .25s ease}
   .bounce:hover{transform:translateY(-6px) scale(1.02)}
@@ -622,6 +640,22 @@
 
 <div class="page" id="top">
 
+  <!-- ================= LIVE INFO STRIP ================= -->
+  <div class="live-strip" aria-label="Your local date, time and weather">
+    <div class="live-pill">
+      <span class="lp-loc" id="lpLoc" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10.2c0 5.2-8 11.3-8 11.3S4 15.4 4 10.2a8 8 0 1116 0z"/><circle cx="12" cy="10.2" r="3"/></svg>
+        <span id="lpCity"></span>
+      </span>
+      <span class="lp-sep" id="lpSep1" hidden aria-hidden="true">·</span>
+      <span id="lpDate"></span>
+      <span class="lp-sep" aria-hidden="true">·</span>
+      <span id="lpTime"></span>
+      <span class="lp-sep" id="lpSep2" hidden aria-hidden="true">·</span>
+      <span class="lp-temp" id="lpTemp" hidden></span>
+    </div>
+  </div>
+
   <!-- ================= TOP BAR ================= -->
   <header class="topbar">
     <a class="logo" href="#top">
@@ -1176,6 +1210,9 @@
     en: {
       navAbout: "About", navSkills: "Skills", navEdu: "Education", navContact: "Contact",
       navGallery: "Gallery",
+      wxClear: "Clear sky", wxPartly: "Partly cloudy", wxCloudy: "Cloudy",
+      wxFog: "Foggy", wxDrizzle: "Drizzle", wxRain: "Rain",
+      wxSnow: "Snow", wxThunder: "Thunderstorm",
       quoteText: "The wound is the place where the Light enters you.",
       quoteBy: "Jalaluddin Rumi",
       curTag: "Currently", curReadB: "Reading",
@@ -1283,6 +1320,9 @@
     bn: {
       navAbout: "আমার সম্পর্কে", navSkills: "দক্ষতা", navEdu: "শিক্ষা", navContact: "যোগাযোগ",
       navGallery: "গ্যালারি",
+      wxClear: "পরিষ্কার আকাশ", wxPartly: "আংশিক মেঘলা", wxCloudy: "মেঘলা",
+      wxFog: "কুয়াশা", wxDrizzle: "গুঁড়ি গুঁড়ি বৃষ্টি", wxRain: "বৃষ্টি",
+      wxSnow: "তুষারপাত", wxThunder: "বজ্রঝড়",
       quoteText: "ক্ষতটাই সেই জায়গা, যেখান দিয়ে আলো তোমার ভেতরে ঢোকে।",
       quoteBy: "জালালুদ্দিন রুমি",
       curTag: "বর্তমানে", curReadB: "পড়ছি",
@@ -1413,6 +1453,7 @@
     bEn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
     bBn.setAttribute('aria-pressed', lang === 'bn' ? 'true' : 'false');
     if (typeof refreshGalleryUI === 'function') refreshGalleryUI();
+    if (typeof renderLiveStrip === 'function') renderLiveStrip();
   }
 
   document.getElementById('btnEn').addEventListener('click', function () { setLang('en'); });
@@ -1484,6 +1525,93 @@
       refreshGalleryUI();
     });
   }
+
+  /* ---------- Live info strip: the visitor's own date, time, city & weather ---------- */
+  var liveData = { city: null, country: null, temp: null, code: null };
+
+  function wxKey(code) {
+    if (code === 0) return 'wxClear';
+    if (code === 1 || code === 2) return 'wxPartly';
+    if (code === 3) return 'wxCloudy';
+    if (code === 45 || code === 48) return 'wxFog';
+    if (code >= 51 && code <= 57) return 'wxDrizzle';
+    if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return 'wxRain';
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'wxSnow';
+    if (code >= 95) return 'wxThunder';
+    return 'wxCloudy';
+  }
+
+  function renderLiveStrip() {
+    var locale = (currentLang === 'bn') ? 'bn-BD' : 'en-GB';
+    var now = new Date();
+    var dateEl = document.getElementById('lpDate');
+    var timeEl = document.getElementById('lpTime');
+    if (dateEl) {
+      dateEl.textContent = new Intl.DateTimeFormat(locale, {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+      }).format(now);
+    }
+    if (timeEl) {
+      timeEl.textContent = new Intl.DateTimeFormat(locale, {
+        hour: '2-digit', minute: '2-digit', hour12: true
+      }).format(now);
+    }
+    if (liveData.city) {
+      var cityEl = document.getElementById('lpCity');
+      var locEl = document.getElementById('lpLoc');
+      var sep1 = document.getElementById('lpSep1');
+      if (cityEl && locEl) {
+        cityEl.textContent = liveData.country ? (liveData.city + ', ' + liveData.country) : liveData.city;
+        locEl.hidden = false;
+        if (sep1) sep1.hidden = false;
+      }
+    }
+    if (liveData.temp !== null && liveData.temp !== undefined) {
+      var tempEl = document.getElementById('lpTemp');
+      var sep2 = document.getElementById('lpSep2');
+      if (tempEl) {
+        var dict = I18N[currentLang];
+        tempEl.textContent = Math.round(liveData.temp).toLocaleString(locale) + '°C';
+        var cond = dict[wxKey(liveData.code)];
+        if (cond) {
+          var cs = document.createElement('span');
+          cs.className = 'lp-cond';
+          cs.textContent = ' · ' + cond;
+          tempEl.appendChild(cs);
+        }
+        tempEl.hidden = false;
+        if (sep2) sep2.hidden = false;
+      }
+    }
+  }
+  renderLiveStrip();
+  setInterval(renderLiveStrip, 30000);
+
+  function fetchJSON(url, ms) {
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, ms) : null;
+    return fetch(url, ctrl ? { signal: ctrl.signal } : {}).then(function (r) {
+      if (timer) clearTimeout(timer);
+      if (!r.ok) throw new Error('request failed');
+      return r.json();
+    });
+  }
+
+  fetchJSON('https://ipapi.co/json/', 6000).then(function (loc) {
+    if (!loc || loc.latitude === undefined || loc.longitude === undefined) return null;
+    liveData.city = loc.city || null;
+    liveData.country = loc.country_name || null;
+    renderLiveStrip();
+    return fetchJSON(
+      'https://api.open-meteo.com/v1/forecast?latitude=' + loc.latitude +
+      '&longitude=' + loc.longitude + '&current=temperature_2m,weather_code', 6000);
+  }).then(function (wx) {
+    if (wx && wx.current) {
+      liveData.temp = wx.current.temperature_2m;
+      liveData.code = wx.current.weather_code;
+      renderLiveStrip();
+    }
+  }).catch(function () { /* location/weather unavailable — date & time still show */ });
 
   var photoModal = document.getElementById('photoModal');
   var photoModalImg = document.getElementById('photoModalImg');
