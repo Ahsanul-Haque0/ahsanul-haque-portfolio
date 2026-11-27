@@ -755,6 +755,22 @@
   @media (max-width:400px){
     .hero-cta .btn{padding:10px 4px;font-size:11px}
   }
+  /* Phone only: bento stat cards as two rounded boxes side by side in one
+     row (not full-width stacked bars), and Spotify rows cleaned up —
+     play button at the right end, playlist tag on its own line under the
+     artist so title/artist text never collides with it. Desktop untouched. */
+  @media (max-width:680px){
+    .bento{grid-template-columns:1fr 1fr;grid-template-areas:"photo photo" "orange grey" "write write";gap:12px}
+    .b-stat{min-height:118px;padding:20px 16px}
+    .b-stat .num{font-size:1.95rem}
+    .b-stat .lbl{font-size:13px;margin-top:6px}
+
+    .spot-row{flex-wrap:wrap;gap:8px 12px;padding:12px 14px}
+    .spot-row .sp-txt{order:1;flex:1 1 calc(100% - 50px);min-width:0}
+    .spot-row .sp-play{order:2;width:38px;height:38px}
+    .spot-row .sp-play svg{width:15px;height:15px}
+    .spot-row .sp-tag{order:3}
+  }
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{transition:none !important;animation:none !important}
@@ -1788,8 +1804,47 @@
   var spotList = document.getElementById('spotList');
   var spotPlayingId = null;
 
+  /* One-tap play via Spotify's official iFrame API: ONE embed controller
+     lives in the player slot; a row tap loads the track into it and calls
+     play() from the same tap, so the song starts immediately (preview for
+     logged-out visitors, full track when signed in — Spotify's own rule).
+     If the API script is blocked or fails, playSpot falls back to the
+     plain embed iframe used before. */
+  var spotApi = null;
+  var spotController = null;
+  var spotCreating = false;
+  var spotPendingUri = null;
+  var spotWantPlay = false;
+
+  window.onSpotifyIframeApiReady = function (IFrameAPI) { spotApi = IFrameAPI; };
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'https://open.spotify.com/embed/iframe-api/v1';
+    s.async = true;
+    document.head.appendChild(s);
+  })();
+
+  function spotOnPlayback(e) {
+    if (!e || !e.data) return;
+    if (!e.data.isPaused) { spotWantPlay = false; return; }
+    /* A play() sent before the track finished loading can be dropped by
+       the embed; retry it once when the loaded track reports paused. */
+    if (spotWantPlay && spotController) {
+      spotWantPlay = false;
+      spotController.play();
+    }
+  }
+
   function stopSpot() {
-    if (spotFrame) spotFrame.innerHTML = '';
+    spotWantPlay = false;
+    spotPendingUri = null;
+    if (spotController) {
+      try { spotController.pause(); } catch (err) {}
+      spotController = null;
+      if (spotFrame) spotFrame.innerHTML = '';
+    } else if (!spotCreating && spotFrame) {
+      spotFrame.innerHTML = '';
+    }
     spotPlayingId = null;
     if (spotList) {
       var rows = spotList.querySelectorAll('.spot-row');
@@ -1802,7 +1857,28 @@
 
   function playSpot(song, row) {
     spotPlayingId = song.id;
-    if (spotFrame) {
+    var uri = 'spotify:track:' + song.id;
+    if (spotController) {
+      spotWantPlay = true;
+      spotController.loadUri(uri);
+      spotController.play();
+    } else if (spotApi && spotFrame) {
+      spotWantPlay = true;
+      spotPendingUri = uri;
+      if (!spotCreating) {
+        spotCreating = true;
+        spotFrame.innerHTML = '';
+        var host = document.createElement('div');
+        spotFrame.appendChild(host);
+        spotApi.createController(host, { uri: uri, width: '100%', height: 152 }, function (ctl) {
+          spotCreating = false;
+          spotController = ctl;
+          ctl.addListener('playback_update', spotOnPlayback);
+          if (spotPendingUri && spotPendingUri !== uri) ctl.loadUri(spotPendingUri);
+          if (spotWantPlay) ctl.play();
+        });
+      }
+    } else if (spotFrame) {
       spotFrame.innerHTML = '<iframe src="https://open.spotify.com/embed/track/' + song.id + '?utm_source=generator" title="Spotify — ' + song.t.replace(/"/g, '') + '" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
     }
     var rows = spotList.querySelectorAll('.spot-row');
