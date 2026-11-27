@@ -1095,6 +1095,55 @@
 
   </div>
 
+  <!-- ================= LATEST POEM ================= -->
+  <style>
+    .poem-kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-deep)}
+    .poem-title{font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.25;margin:10px 0 4px;color:var(--ink)}
+    html[lang="bn"] .poem-title{font-family:"Hind Siliguri",sans-serif}
+    .poem-by{color:var(--muted);font-size:14px;margin:0 0 18px}
+    .poem-lines{font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:1.95;color:var(--ink-soft)}
+    .poem-lines p{margin:0}
+    html[lang="bn"] .poem-lines{font-family:"Hind Siliguri",sans-serif}
+    .poem-bn{display:none}
+    html[lang="bn"] .poem-bn{display:block}
+    html[lang="bn"] .poem-en{display:none}
+    .poem-more{margin-top:22px}
+    @media (max-width:680px){.poem-title{font-size:25px}.poem-lines{font-size:16.5px;line-height:1.9}}
+  </style>
+  <section class="block" id="poem">
+    <div class="panel">
+      <div class="poem-kicker" data-i18n="poemKicker">Latest Poem</div>
+      <h2 class="poem-title poem-en">The Unwritten Last Page</h2>
+      <h2 class="poem-title poem-bn">অলিখিত শেষ পাতা</h2>
+      <p class="poem-by" data-i18n="poemBy">A poem by Ahsanul Haque</p>
+      <div class="poem-lines poem-en">
+        <p>Some afternoons linger beside forgotten windows</p>
+        <p>Where sunlight rests without waiting for you anymore,</p>
+        <p>A bird crosses the same sky every morning,</p>
+        <p>yet no one remembers the story of its return.</p>
+        <p>When I think of you, I think no particular season</p>
+        <p>I think of a letter left unfinished,</p>
+        <p>Its final page untouched by ink</p>
+        <p>yet holding more words than I could ever contain.</p>
+      </div>
+      <div class="poem-lines poem-bn">
+        <p>কিছু বিকেল ভুলে যাওয়া জানালার পাশে থমকে থাকে</p>
+        <p>যেখানে রোদ আর তোমার জন্য অপেক্ষা না করে বিশ্রাম নেয়,</p>
+        <p>একটা পাখি প্রতিদিন সকালে একই আকাশ পাড়ি দেয়,</p>
+        <p>তবু কারো মনে থাকে না তার ফিরে আসার গল্প।</p>
+        <p>তোমাকে ভাবলে আমি কোনো নির্দিষ্ট ঋতুর কথা ভাবি না</p>
+        <p>আমি ভাবি একটা অসমাপ্ত রেখে যাওয়া চিঠির কথা,</p>
+        <p>যার শেষ পাতায় কালির ছোঁয়া লাগেনি</p>
+        <p>তবু তাতে জমে আছে আমার ধারণ করার চেয়ে বেশি কথা।</p>
+      </div>
+      <div class="poem-more">
+        <a class="btn btn-white bounce" href="https://ahsan-knows.vercel.app/#/article/s-unwritten-last-page" target="_blank" rel="noopener"><span data-i18n="poemRead">Read on Ahsan Knows</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= ABOUT ================= -->
   <section class="block" id="about">
     <div class="panel">
@@ -1436,6 +1485,7 @@
       h1a: "CSE Student", h1b: "&", h1c: "Writer",
       heroIntro: "I'm Ahsanul Haque. I study Computer Science at Northern University Bangladesh, and I write Ahsan Knows, where history, culture and society come alive in English and Bengali.",
       ctaRead: "Read My Articles", ctaFollow: "Follow on Instagram",
+      poemKicker: "Latest Poem", poemBy: "A poem by Ahsanul Haque", poemRead: "Read on Ahsan Knows",
       fcAkText: "My bilingual magazine of history, culture & society",
       fcAkSub: "12+ stories published", fcChartTitle: "2 Languages",
       capSub: "Student & storyteller · Dhaka, Bangladesh",
@@ -1569,6 +1619,7 @@
       h1a: "CSE ছাত্র", h1b: "ও", h1c: "লেখক",
       heroIntro: "আমি আহসানুল হক। নর্দার্ন ইউনিভার্সিটি বাংলাদেশে কম্পিউটার সায়েন্সে পড়ি, আর লিখি Ahsan Knows, যেখানে ইতিহাস, সংস্কৃতি আর সমাজ জীবন্ত হয়ে ওঠে ইংরেজি ও বাংলায়।",
       ctaRead: "আমার লেখা পড়ুন", ctaFollow: "ইনস্টাগ্রামে ফলো করুন",
+      poemKicker: "সর্বশেষ কবিতা", poemBy: "আহসানুল হকের লেখা একটি কবিতা", poemRead: "Ahsan Knows-এ পড়ুন",
       fcAkText: "ইতিহাস, সংস্কৃতি ও সমাজ নিয়ে আমার দ্বিভাষিক ম্যাগাজিন",
       fcAkSub: "১২+ লেখা প্রকাশিত", fcChartTitle: "২টি ভাষা",
       capSub: "ছাত্র ও গল্পকার · ঢাকা, বাংলাদেশ",
