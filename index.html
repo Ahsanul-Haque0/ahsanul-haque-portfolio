@@ -1152,9 +1152,10 @@
     @media (max-width:680px){.duo{grid-template-columns:1fr}.duo-card h3{font-size:21px}.poem-lines{font-size:16.5px;line-height:1.9}}
     .about-head{align-items:center}
     .hero{padding-top:38px;align-items:start}
-    .hero-head{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-    .hero-head h1{margin:0}
-    .hero-head .avatar-circle{width:clamp(104px,13.5vw,148px);height:clamp(104px,13.5vw,148px)}
+    .hero-head{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
+    .hero-head h1{margin:0;min-width:0}
+    .hero-head .avatar-circle{width:clamp(100px,12.5vw,138px);height:clamp(100px,12.5vw,138px)}
+    @media (min-width:681px){.hero{grid-template-columns:1.18fr .82fr}}
     .avatar-line{margin:18px 0 0;font-size:13.5px;font-weight:500;color:var(--ink-soft);line-height:1.45}
     .lang-tap{display:none}
     .about-head-photo{width:66px;height:66px;border-radius:50%;object-fit:cover;object-position:50% 20%;flex:0 0 auto;border:3px solid #fff;box-shadow:var(--shadow-card)}
@@ -1169,7 +1170,7 @@
       .top-actions .btn-top{height:2.15rem;padding:0 12px;font-size:12.5px}
       .about-head-photo{width:54px;height:54px}
       .hero{padding-top:24px}
-      .hero-head{gap:16px}
+      .hero-head{gap:16px;flex-wrap:wrap}
       .topnav{margin-top:8px}
       .hero-head .avatar-circle{width:92px;height:92px}
       .lang-toggle{display:none}
