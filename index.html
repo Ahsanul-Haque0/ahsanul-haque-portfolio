@@ -1095,51 +1095,53 @@
 
   </div>
 
-  <!-- ================= LATEST POEM ================= -->
+  <!-- ================= WRITING BOXES ================= -->
   <style>
-    .poem-kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-deep)}
-    .poem-title{font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.25;margin:10px 0 4px;color:var(--ink)}
-    html[lang="bn"] .poem-title{font-family:"Hind Siliguri",sans-serif}
-    .poem-by{color:var(--muted);font-size:14px;margin:0 0 18px}
-    .poem-lines{font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:1.95;color:var(--ink-soft)}
+    .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .duo-card{display:block;text-decoration:none;cursor:pointer}
+    .duo-card h3{font-size:24px;margin:8px 0 6px;color:var(--ink)}
+    .duo-text{color:var(--muted);font-size:15px;line-height:1.65;margin:0}
+    .duo-go{display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-weight:700;font-size:14.5px;color:var(--accent-deep)}
+    .duo-go svg{width:14px;height:14px}
+    .poem-lines{font-family:Georgia,'Times New Roman',serif;font-size:18.5px;line-height:1.95;color:var(--ink-soft)}
     .poem-lines p{margin:0}
     html[lang="bn"] .poem-lines{font-family:"Hind Siliguri",sans-serif}
+    html[lang="bn"] .poem-title-txt{font-family:"Hind Siliguri",sans-serif}
     .poem-bn{display:none}
     html[lang="bn"] .poem-bn{display:block}
     html[lang="bn"] .poem-en{display:none}
-    .poem-more{margin-top:22px}
-    @media (max-width:680px){.poem-title{font-size:25px}.poem-lines{font-size:16.5px;line-height:1.9}}
+    .wp-item{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;cursor:pointer;font:inherit;color:inherit;box-shadow:var(--shadow-card)}
+    .wp-num{flex:0 0 auto;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-deep);background:var(--orange-soft);border-radius:999px;padding:6px 11px}
+    .wp-item-txt{flex:1;min-width:0}
+    .wp-item-title{display:block;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:var(--ink)}
+    html[lang="bn"] .wp-item-title{font-family:"Hind Siliguri",sans-serif}
+    .wp-item-by{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+    .wp-arrow{flex:0 0 auto;color:var(--muted)}
+    .wp-arrow svg{width:18px;height:18px;display:block}
+    .wp-empty{color:var(--muted);font-size:15.5px;line-height:1.7;border:1.5px dashed var(--line);border-radius:18px;padding:22px;text-align:center}
+    .about-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;cursor:pointer}
+    .about-head .about-head-txt{flex:1;min-width:0}
+    .about-chev{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--ink-soft);transition:transform .45s var(--spring);margin-top:4px}
+    .about-chev svg{width:18px;height:18px}
+    .about-head.open .about-chev{transform:rotate(180deg)}
+    .about-collapse{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s ease}
+    .about-collapse.open{grid-template-rows:1fr}
+    .about-collapse-in{overflow:hidden;min-height:0}
+    @media (max-width:680px){.duo{grid-template-columns:1fr}.duo-card h3{font-size:21px}.poem-lines{font-size:16.5px;line-height:1.9}}
   </style>
-  <section class="block" id="poem">
-    <div class="panel">
-      <div class="poem-kicker" data-i18n="poemKicker">Latest Poem</div>
-      <h2 class="poem-title poem-en">The Unwritten Last Page</h2>
-      <h2 class="poem-title poem-bn">অলিখিত শেষ পাতা</h2>
-      <p class="poem-by" data-i18n="poemBy">A poem by Ahsanul Haque</p>
-      <div class="poem-lines poem-en">
-        <p>Some afternoons linger beside forgotten windows</p>
-        <p>Where sunlight rests without waiting for you anymore,</p>
-        <p>A bird crosses the same sky every morning,</p>
-        <p>yet no one remembers the story of its return.</p>
-        <p>When I think of you, I think no particular season</p>
-        <p>I think of a letter left unfinished,</p>
-        <p>Its final page untouched by ink</p>
-        <p>yet holding more words than I could ever contain.</p>
-      </div>
-      <div class="poem-lines poem-bn">
-        <p>কিছু বিকেল ভুলে যাওয়া জানালার পাশে থমকে থাকে</p>
-        <p>যেখানে রোদ আর তোমার জন্য অপেক্ষা না করে বিশ্রাম নেয়,</p>
-        <p>একটা পাখি প্রতিদিন সকালে একই আকাশ পাড়ি দেয়,</p>
-        <p>তবু কারো মনে থাকে না তার ফিরে আসার গল্প।</p>
-        <p>তোমাকে ভাবলে আমি কোনো নির্দিষ্ট ঋতুর কথা ভাবি না</p>
-        <p>আমি ভাবি একটা অসমাপ্ত রেখে যাওয়া চিঠির কথা,</p>
-        <p>যার শেষ পাতায় কালির ছোঁয়া লাগেনি</p>
-        <p>তবু তাতে জমে আছে আমার ধারণ করার চেয়ে বেশি কথা।</p>
-      </div>
-      <div class="poem-more">
-        <a class="btn btn-white bounce" href="https://ahsan-knows.vercel.app/#/article/s-unwritten-last-page" target="_blank" rel="noopener"><span data-i18n="poemRead">Read on Ahsan Knows</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M7 17L17 7M9 7h8v8"/></svg>
-        </a>
+  <section class="block" id="writing">
+    <div class="duo">
+      <a class="panel duo-card bounce" href="https://ahsan-knows.vercel.app" target="_blank" rel="noopener">
+        <span class="kicker" data-i18n="artKicker">Articles</span>
+        <h3 data-i18n="artTitle">Ahsan Knows</h3>
+        <p class="duo-text" data-i18n="artText">History, culture and society — all my articles in one place, in English and Bengali.</p>
+        <span class="duo-go"><span data-i18n="artGo">Read my articles</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <div class="panel duo-card bounce" id="writingCard" tabindex="0" role="button" aria-haspopup="dialog">
+        <span class="kicker" data-i18n="wrKicker">Creative writing</span>
+        <h3 data-i18n="wrTitle">Poems &amp; Stories</h3>
+        <p class="duo-text" data-i18n="wrText">The other side of my pen — my poems, and the stories that are on their way.</p>
+        <span class="duo-go"><span data-i18n="wrGo">Browse the collection</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </div>
     </div>
   </section>
@@ -1147,11 +1149,18 @@
   <!-- ================= ABOUT ================= -->
   <section class="block" id="about">
     <div class="panel">
-      <div class="about-grid">
-        <div>
+      <div class="about-head" id="aboutToggle" tabindex="0" role="button" aria-expanded="false" aria-controls="aboutCollapse">
+        <div class="about-head-txt">
           <span class="kicker" data-i18n="aboutKicker">About me</span>
           <h2 data-i18n="aboutH2">A student by day, a storyteller by heart</h2>
-          <div class="about-copy" style="margin-top:22px">
+        </div>
+        <span class="about-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+      </div>
+      <div class="about-collapse" id="aboutCollapse">
+        <div class="about-collapse-in">
+      <div class="about-grid">
+        <div>
+          <div class="about-copy">
             <p data-i18n="aboutP1">I'm Ahsanul Haque, a CSE student at Northern University Bangladesh and a writer who believes the past explains the present. Through Ahsan Knows, I write about history, historical figures, politics, sports and society in both English and Bengali, so readers back home can enjoy big stories in their own words.</p>
             <p data-i18n="aboutP2">People who know me describe me as a friendly person who listens first. I never judge anyone for who they are or what they're going through, and if someone comes to me for help, I do my best to actually help. I put real effort into keeping my friendships alive, because a friendship, to me, is something you look after.</p>
             <p data-i18n="aboutP3">That's also why people often come to me to talk things through. I have no professional degree in counselling, but many friends say my listening and mentoring have genuinely helped them, and I'm grateful for that trust.</p>
@@ -1181,6 +1190,8 @@
           <span class="cur-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5"/><path d="M22 9v5"/></svg></span>
           <div><b data-i18n="curStudyB">Studying</b><span data-i18n="curStudy">CSE at Northern University Bangladesh</span></div>
         </div>
+      </div>
+      </div>
       </div>
     </div>
   </section>
@@ -1376,6 +1387,88 @@
     </div>
   </div>
 
+  <!-- ================= POEMS & STORIES PAGE ================= -->
+  <div class="bp" id="writingPage" role="dialog" aria-modal="true" hidden>
+    <div class="bp-topbar">
+      <button type="button" class="bp-back bounce" id="wpBackBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        <span data-i18n="pgBack">Back</span>
+      </button>
+      <button type="button" class="bp-close bounce" id="wpClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="bp-wrap">
+      <header class="bp-head">
+        <div class="bp-head-txt">
+          <h2 data-i18n="wrTitle">Poems &amp; Stories</h2>
+          <p class="bp-author" data-i18n="wrText">The other side of my pen — my poems, and the stories that are on their way.</p>
+        </div>
+      </header>
+      <section class="bp-sec">
+        <h3 data-i18n="poemsHead">Poems</h3>
+        <button type="button" class="wp-item bounce" id="poemItem1">
+          <span class="wp-num" data-i18n="poemNum1">Poem 1</span>
+          <span class="wp-item-txt">
+            <span class="wp-item-title poem-en">The Unwritten Last Page</span>
+            <span class="wp-item-title poem-bn">অলিখিত শেষ পাতা</span>
+            <span class="wp-item-by" data-i18n="poemAuthor">Ahsanul Haque</span>
+          </span>
+          <span class="wp-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+      </section>
+      <section class="bp-sec">
+        <h3 data-i18n="storiesHead">Stories</h3>
+        <p class="wp-empty" data-i18n="storyEmpty">No stories yet — this shelf is waiting. When I publish a story, it will live here.</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= POEM READING PAGE ================= -->
+  <div class="bp" id="poemPage" role="dialog" aria-modal="true" hidden>
+    <div class="bp-topbar">
+      <button type="button" class="bp-back bounce" id="ppBackBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        <span data-i18n="pgBack">Back</span>
+      </button>
+      <button type="button" class="bp-close bounce" id="ppClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="bp-wrap">
+      <header class="bp-head">
+        <div class="bp-head-txt">
+          <p class="bp-author" data-i18n="poemNum1">Poem 1</p>
+          <h2 class="poem-title-txt poem-en">The Unwritten Last Page</h2>
+          <h2 class="poem-title-txt poem-bn">অলিখিত শেষ পাতা</h2>
+          <p class="bp-author" data-i18n="poemBy">A poem by Ahsanul Haque</p>
+        </div>
+      </header>
+      <section class="bp-sec">
+        <div class="poem-lines poem-en">
+          <p>Some afternoons linger beside forgotten windows</p>
+          <p>Where sunlight rests without waiting for you anymore,</p>
+          <p>A bird crosses the same sky every morning,</p>
+          <p>yet no one remembers the story of its return.</p>
+          <p>When I think of you, I think no particular season</p>
+          <p>I think of a letter left unfinished,</p>
+          <p>Its final page untouched by ink</p>
+          <p>yet holding more words than I could ever contain.</p>
+        </div>
+        <div class="poem-lines poem-bn">
+          <p>কিছু বিকেল ভুলে যাওয়া জানালার পাশে থমকে থাকে</p>
+          <p>যেখানে রোদ আর তোমার জন্য অপেক্ষা না করে বিশ্রাম নেয়,</p>
+          <p>একটা পাখি প্রতিদিন সকালে একই আকাশ পাড়ি দেয়,</p>
+          <p>তবু কারো মনে থাকে না তার ফিরে আসার গল্প।</p>
+          <p>তোমাকে ভাবলে আমি কোনো নির্দিষ্ট ঋতুর কথা ভাবি না</p>
+          <p>আমি ভাবি একটা অসমাপ্ত রেখে যাওয়া চিঠির কথা,</p>
+          <p>যার শেষ পাতায় কালির ছোঁয়া লাগেনি</p>
+          <p>তবু তাতে জমে আছে আমার ধারণ করার চেয়ে বেশি কথা।</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
   <!-- ================= EDUCATION ================= -->
   <section class="block" id="education">
     <div class="panel">
@@ -1485,7 +1578,7 @@
       h1a: "CSE Student", h1b: "&", h1c: "Writer",
       heroIntro: "I'm Ahsanul Haque. I study Computer Science at Northern University Bangladesh, and I write Ahsan Knows, where history, culture and society come alive in English and Bengali.",
       ctaRead: "Read My Articles", ctaFollow: "Follow on Instagram",
-      poemKicker: "Latest Poem", poemBy: "A poem by Ahsanul Haque", poemRead: "Read on Ahsan Knows",
+      artKicker: "Articles", artTitle: "Ahsan Knows", artText: "History, culture and society — all my articles in one place, in English and Bengali.", artGo: "Read my articles", wrKicker: "Creative writing", wrTitle: "Poems & Stories", wrText: "The other side of my pen — my poems, and the stories that are on their way.", wrGo: "Browse the collection", poemsHead: "Poems", storiesHead: "Stories", storyEmpty: "No stories yet — this shelf is waiting. When I publish a story, it will live here.", poemNum1: "Poem 1", poemAuthor: "Ahsanul Haque", poemBy: "A poem by Ahsanul Haque", pgBack: "Back",
       fcAkText: "My bilingual magazine of history, culture & society",
       fcAkSub: "12+ stories published", fcChartTitle: "2 Languages",
       capSub: "Student & storyteller · Dhaka, Bangladesh",
@@ -1619,7 +1712,7 @@
       h1a: "CSE ছাত্র", h1b: "ও", h1c: "লেখক",
       heroIntro: "আমি আহসানুল হক। নর্দার্ন ইউনিভার্সিটি বাংলাদেশে কম্পিউটার সায়েন্সে পড়ি, আর লিখি Ahsan Knows, যেখানে ইতিহাস, সংস্কৃতি আর সমাজ জীবন্ত হয়ে ওঠে ইংরেজি ও বাংলায়।",
       ctaRead: "আমার লেখা পড়ুন", ctaFollow: "ইনস্টাগ্রামে ফলো করুন",
-      poemKicker: "সর্বশেষ কবিতা", poemBy: "আহসানুল হকের লেখা একটি কবিতা", poemRead: "Ahsan Knows-এ পড়ুন",
+      artKicker: "আর্টিকেল", artTitle: "Ahsan Knows", artText: "ইতিহাস, সংস্কৃতি আর সমাজ — আমার সব আর্টিকেল এক জায়গায়, ইংরেজি আর বাংলায়।", artGo: "আমার আর্টিকেল পড়ুন", wrKicker: "সৃজনশীল লেখা", wrTitle: "কবিতা ও গল্প", wrText: "আমার কলমের অন্য দিক — আমার কবিতা, আর আসতে থাকা গল্পগুলো।", wrGo: "সংগ্রহটা দেখুন", poemsHead: "কবিতা", storiesHead: "গল্প", storyEmpty: "এখনো কোনো গল্প নেই — এই তাকটা অপেক্ষা করছে। গল্প প্রকাশ করলেই এখানে থাকবে।", poemNum1: "কবিতা ১", poemAuthor: "আহসানুল হক", poemBy: "আহসানুল হকের লেখা একটি কবিতা", pgBack: "ফিরে যান",
       fcAkText: "ইতিহাস, সংস্কৃতি ও সমাজ নিয়ে আমার দ্বিভাষিক ম্যাগাজিন",
       fcAkSub: "১২+ লেখা প্রকাশিত", fcChartTitle: "২টি ভাষা",
       capSub: "ছাত্র ও গল্পকার · ঢাকা, বাংলাদেশ",
@@ -2768,6 +2861,74 @@
     if (openPhotoNum) fillPhotoModal();
     if (openBookNum) fillBookPage();
   }
+  /* ===== About collapse ===== */
+  var aboutToggle = document.getElementById('aboutToggle');
+  var aboutCollapse = document.getElementById('aboutCollapse');
+  function toggleAbout() {
+    if (!aboutCollapse) return;
+    var open = aboutCollapse.classList.toggle('open');
+    aboutToggle.classList.toggle('open', open);
+    aboutToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  if (aboutToggle) {
+    aboutToggle.addEventListener('click', toggleAbout);
+    aboutToggle.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAbout(); }
+    });
+  }
+
+  /* ===== Poems & Stories pages ===== */
+  var writingPage = document.getElementById('writingPage');
+  var poemPage = document.getElementById('poemPage');
+  var writingCard = document.getElementById('writingCard');
+  var poemItem1 = document.getElementById('poemItem1');
+  var lastWritingFocus = null;
+  function showOverlayPage(p) {
+    p.hidden = false;
+    p.classList.remove('open');
+    void p.offsetWidth;
+    p.classList.add('open');
+    p.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+  function hideOverlayPage(p) { p.classList.remove('open'); p.hidden = true; }
+  function openWriting() {
+    lastWritingFocus = writingCard;
+    showOverlayPage(writingPage);
+    var c = document.getElementById('wpClose'); if (c) c.focus();
+  }
+  function closeWriting() {
+    hideOverlayPage(writingPage);
+    document.body.style.overflow = '';
+    if (lastWritingFocus) lastWritingFocus.focus();
+  }
+  function openPoem() {
+    showOverlayPage(poemPage);
+    var c = document.getElementById('ppClose'); if (c) c.focus();
+  }
+  function closePoem() { hideOverlayPage(poemPage); }
+  function closePoemAll() { hideOverlayPage(poemPage); closeWriting(); }
+  if (writingCard) {
+    writingCard.addEventListener('click', openWriting);
+    writingCard.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openWriting(); }
+    });
+  }
+  var wpClose = document.getElementById('wpClose');
+  var wpBackBtn = document.getElementById('wpBackBtn');
+  var ppClose = document.getElementById('ppClose');
+  var ppBackBtn = document.getElementById('ppBackBtn');
+  if (wpClose) wpClose.addEventListener('click', closeWriting);
+  if (wpBackBtn) wpBackBtn.addEventListener('click', closeWriting);
+  if (poemItem1) poemItem1.addEventListener('click', openPoem);
+  if (ppClose) ppClose.addEventListener('click', closePoemAll);
+  if (ppBackBtn) ppBackBtn.addEventListener('click', closePoem);
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (poemPage && !poemPage.hidden) closePoem();
+    else if (writingPage && !writingPage.hidden) closeWriting();
+  });
+
   refreshGalleryUI();
 </script>
 </body>
