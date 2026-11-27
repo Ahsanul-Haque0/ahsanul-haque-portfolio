@@ -1098,7 +1098,9 @@
   <!-- ================= WRITING BOXES ================= -->
   <style>
     .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-    .duo-card{display:block;text-decoration:none;cursor:pointer}
+    .duo-card{display:block;text-decoration:none;cursor:pointer;border-radius:20px;padding:24px}
+    .duo-a{background:var(--orange-soft)}
+    .duo-b{background:var(--pinkcard)}
     .duo-card h3{font-size:24px;margin:8px 0 6px;color:var(--ink)}
     .duo-text{color:var(--muted);font-size:15px;line-height:1.65;margin:0}
     .duo-go{display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-weight:700;font-size:14.5px;color:var(--accent-deep)}
@@ -1130,19 +1132,23 @@
     @media (max-width:680px){.duo{grid-template-columns:1fr}.duo-card h3{font-size:21px}.poem-lines{font-size:16.5px;line-height:1.9}}
   </style>
   <section class="block" id="writing">
-    <div class="duo">
-      <a class="panel duo-card bounce" href="https://ahsan-knows.vercel.app" target="_blank" rel="noopener">
+    <div class="panel">
+      <span class="kicker" data-i18n="mwKicker">My Writing</span>
+      <h2 data-i18n="mwH2">Everything I write, in one place</h2>
+      <div class="duo" style="margin-top:22px">
+      <a class="duo-card duo-a bounce" href="https://ahsan-knows.vercel.app" target="_blank" rel="noopener">
         <span class="kicker" data-i18n="artKicker">Articles</span>
         <h3 data-i18n="artTitle">Ahsan Knows</h3>
         <p class="duo-text" data-i18n="artText">History, culture and society — all my articles in one place, in English and Bengali.</p>
         <span class="duo-go"><span data-i18n="artGo">Read my articles</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
       </a>
-      <div class="panel duo-card bounce" id="writingCard" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="duo-card duo-b bounce" id="writingCard" tabindex="0" role="button" aria-haspopup="dialog">
         <span class="kicker" data-i18n="wrKicker">Creative writing</span>
         <h3 data-i18n="wrTitle">Poems &amp; Stories</h3>
         <p class="duo-text" data-i18n="wrText">The other side of my pen — my poems, and the stories that are on their way.</p>
         <span class="duo-go"><span data-i18n="wrGo">Browse the collection</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </div>
+    </div>
     </div>
   </section>
 
@@ -1578,7 +1584,7 @@
       h1a: "CSE Student", h1b: "&", h1c: "Writer",
       heroIntro: "I'm Ahsanul Haque. I study Computer Science at Northern University Bangladesh, and I write Ahsan Knows, where history, culture and society come alive in English and Bengali.",
       ctaRead: "Read My Articles", ctaFollow: "Follow on Instagram",
-      artKicker: "Articles", artTitle: "Ahsan Knows", artText: "History, culture and society — all my articles in one place, in English and Bengali.", artGo: "Read my articles", wrKicker: "Creative writing", wrTitle: "Poems & Stories", wrText: "The other side of my pen — my poems, and the stories that are on their way.", wrGo: "Browse the collection", poemsHead: "Poems", storiesHead: "Stories", storyEmpty: "No stories yet — this shelf is waiting. When I publish a story, it will live here.", poemNum1: "Poem 1", poemAuthor: "Ahsanul Haque", poemBy: "A poem by Ahsanul Haque", pgBack: "Back",
+      mwKicker: "My Writing", mwH2: "Everything I write, in one place", artKicker: "Articles", artTitle: "Ahsan Knows", artText: "History, culture and society — all my articles in one place, in English and Bengali.", artGo: "Read my articles", wrKicker: "Creative writing", wrTitle: "Poems & Stories", wrText: "The other side of my pen — my poems, and the stories that are on their way.", wrGo: "Browse the collection", poemsHead: "Poems", storiesHead: "Stories", storyEmpty: "No stories yet — this shelf is waiting. When I publish a story, it will live here.", poemNum1: "Poem 1", poemAuthor: "Ahsanul Haque", poemBy: "A poem by Ahsanul Haque", pgBack: "Back",
       fcAkText: "My bilingual magazine of history, culture & society",
       fcAkSub: "12+ stories published", fcChartTitle: "2 Languages",
       capSub: "Student & storyteller · Dhaka, Bangladesh",
@@ -1712,7 +1718,7 @@
       h1a: "CSE ছাত্র", h1b: "ও", h1c: "লেখক",
       heroIntro: "আমি আহসানুল হক। নর্দার্ন ইউনিভার্সিটি বাংলাদেশে কম্পিউটার সায়েন্সে পড়ি, আর লিখি Ahsan Knows, যেখানে ইতিহাস, সংস্কৃতি আর সমাজ জীবন্ত হয়ে ওঠে ইংরেজি ও বাংলায়।",
       ctaRead: "আমার লেখা পড়ুন", ctaFollow: "ইনস্টাগ্রামে ফলো করুন",
-      artKicker: "আর্টিকেল", artTitle: "Ahsan Knows", artText: "ইতিহাস, সংস্কৃতি আর সমাজ — আমার সব আর্টিকেল এক জায়গায়, ইংরেজি আর বাংলায়।", artGo: "আমার আর্টিকেল পড়ুন", wrKicker: "সৃজনশীল লেখা", wrTitle: "কবিতা ও গল্প", wrText: "আমার কলমের অন্য দিক — আমার কবিতা, আর আসতে থাকা গল্পগুলো।", wrGo: "সংগ্রহটা দেখুন", poemsHead: "কবিতা", storiesHead: "গল্প", storyEmpty: "এখনো কোনো গল্প নেই — এই তাকটা অপেক্ষা করছে। গল্প প্রকাশ করলেই এখানে থাকবে।", poemNum1: "কবিতা ১", poemAuthor: "আহসানুল হক", poemBy: "আহসানুল হকের লেখা একটি কবিতা", pgBack: "ফিরে যান",
+      mwKicker: "আমার লেখা", mwH2: "আমার সব লেখা, এক জায়গায়", artKicker: "আর্টিকেল", artTitle: "Ahsan Knows", artText: "ইতিহাস, সংস্কৃতি আর সমাজ — আমার সব আর্টিকেল এক জায়গায়, ইংরেজি আর বাংলায়।", artGo: "আমার আর্টিকেল পড়ুন", wrKicker: "সৃজনশীল লেখা", wrTitle: "কবিতা ও গল্প", wrText: "আমার কলমের অন্য দিক — আমার কবিতা, আর আসতে থাকা গল্পগুলো।", wrGo: "সংগ্রহটা দেখুন", poemsHead: "কবিতা", storiesHead: "গল্প", storyEmpty: "এখনো কোনো গল্প নেই — এই তাকটা অপেক্ষা করছে। গল্প প্রকাশ করলেই এখানে থাকবে।", poemNum1: "কবিতা ১", poemAuthor: "আহসানুল হক", poemBy: "আহসানুল হকের লেখা একটি কবিতা", pgBack: "ফিরে যান",
       fcAkText: "ইতিহাস, সংস্কৃতি ও সমাজ নিয়ে আমার দ্বিভাষিক ম্যাগাজিন",
       fcAkSub: "১২+ লেখা প্রকাশিত", fcChartTitle: "২টি ভাষা",
       capSub: "ছাত্র ও গল্পকার · ঢাকা, বাংলাদেশ",
